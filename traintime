@@ -1,0 +1,86 @@
+#!/usr/local/bin/python
+
+import csv
+import datetime
+
+# https://developers.google.com/transit/gtfs/reference/
+
+# route_id
+#  2 = Hempstead
+
+# service_id
+#  GO203_1665 = Weekday
+#  GO203_1673 = Weekend
+
+# stop_id
+#   8 = Penn Station
+#  12 = Atlantic Terminal
+#  15 = Jamaica
+#  38 = Country Life Press
+
+# direction_id
+#  0 = Points East
+#  1 = Points West
+
+str2dt = lambda x: datetime.time(*map(int, x.split(':')))
+
+today = "{:%Y%m%d}".format(datetime.date.today())
+
+stops_txt          = '/Users/steven/google_transit/stops.txt'
+trips_txt          = '/Users/steven/google_transit/trips.txt'
+routes_txt         = '/Users/steven/google_transit/routes.txt'
+stop_times_txt     = '/Users/steven/google_transit/stop_times.txt'
+calendar_dates_txt = '/Users/steven/google_transit/calendar_dates.txt'
+
+trip_ids = []
+trains = {}
+
+with open(trips_txt, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    # Skip over the header of the csv file
+    next(csvreader)
+
+    for row in csvreader:
+        route_id = int(row[0])
+        service_id = row[1]
+        direction_id = int(row[5])
+
+        if route_id == 2 and direction_id == 0 and service_id == "GO203_1665":
+            # This is a train that is heading eastbound on a weekday on the hempstead branch
+            trip_ids.append(row[2])
+
+with open(stop_times_txt, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    # Skip over the header of the csv file
+    next(csvreader)
+
+    for row in csvreader:
+        trip_id = row[0]
+        arrival_time = row[1]
+        departure_time = row[2]
+        stop_id = int(row[3])    
+        stop_sequence = int(row[4])
+
+        if stop_id == 8 and stop_sequence == 1 and trip_id in trip_ids:
+            trains[trip_id] = {'depart': departure_time, 'arrive': None}
+
+        if stop_id == 38 and trip_id in trains:
+            trains[trip_id]['arrive'] = arrival_time
+
+for train in sorted(trains):
+    if trains[train]['arrive'] is None:
+        continue
+
+    depart = str2dt(trains[train]['depart'])
+    arrive = str2dt(trains[train]['arrive'])
+
+    depart_delta = datetime.timedelta(hours=depart.hour, minutes=depart.minute)
+    arrive_delta = datetime.timedelta(hours=arrive.hour, minutes=arrive.minute)
+
+    travel_time = str2dt((arrive_delta - depart_delta).__str__())
+
+    print "{} -> {} ({}{})".format(
+        depart.strftime("%H:%M"),
+        arrive.strftime("%H:%M"),
+        travel_time.strftime("%H hour ") if travel_time.hour > 0 else "",
+        travel_time.strftime("%M minutes"))
