@@ -84,7 +84,20 @@ stop_times_txt     = '/Users/steven/google_transit/stop_times.txt'
 calendar_dates_txt = '/Users/steven/google_transit/calendar_dates.txt'
 
 trip_ids = []
+service_ids = []
 trains = {}
+
+with open(calendar_dates_txt, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    next(csvreader)
+
+    for row in csvreader:
+        service_id = row[0]
+        date = row[1]
+        exception_type = int(row[2])
+
+        if date == today:
+            service_ids.append(service_id)
 
 with open(trips_txt, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
@@ -96,8 +109,8 @@ with open(trips_txt, 'r') as csvfile:
         service_id = row[1]
         direction_id = int(row[5])
 
-        if route_id == 2 and direction_id == 0 and service_id == "GO203_1665":
-            # This is a train that is heading eastbound on a weekday on the hempstead branch
+        if route_id == 2 and direction_id == 0 and service_id in service_ids:
+            # This is a train that is heading eastbound on the hempstead branch
             trip_ids.append(row[2])
 
 with open(stop_times_txt, 'r') as csvfile:
