@@ -2,6 +2,7 @@
 
 import csv
 import datetime
+import sys
 
 """
 GTFS specification (https://developers.google.com/transit/gtfs/reference/)
@@ -98,6 +99,10 @@ with open(calendar_dates_txt, 'r') as csvfile:
 
         if date == today:
             service_ids.append(service_id)
+
+if not service_ids:
+    print "No service ids found for {}.".format(today)
+    sys.exit(1)
 
 with open(trips_txt, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
