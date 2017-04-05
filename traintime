@@ -3,6 +3,7 @@
 import csv
 import datetime
 import sys
+import os
 
 """
 GTFS specification (https://developers.google.com/transit/gtfs/reference/)
@@ -78,11 +79,11 @@ str2dt = lambda x: datetime.time(*map(int, x.split(':')))
 today = "{:%Y%m%d}".format(datetime.date.today())
 now   = str2dt(datetime.datetime.now().strftime('%H:%M'))
 
-stops_txt          = '/Users/steven/google_transit/stops.txt'
-trips_txt          = '/Users/steven/google_transit/trips.txt'
-routes_txt         = '/Users/steven/google_transit/routes.txt'
-stop_times_txt     = '/Users/steven/google_transit/stop_times.txt'
-calendar_dates_txt = '/Users/steven/google_transit/calendar_dates.txt'
+stops_txt          = os.environ['HOME'] + '/google_transit/stops.txt'
+trips_txt          = os.environ['HOME'] + '/google_transit/trips.txt'
+routes_txt         = os.environ['HOME'] + '/google_transit/routes.txt'
+stop_times_txt     = os.environ['HOME'] + '/google_transit/stop_times.txt'
+calendar_dates_txt = os.environ['HOME'] + '/google_transit/calendar_dates.txt'
 
 trip_ids = []
 service_ids = []
