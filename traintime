@@ -131,7 +131,7 @@ with open(stop_times_txt, 'r') as csvfile:
         stop_id = int(row[3])
         stop_sequence = int(row[4])
 
-        if stop_id == 8 and stop_sequence == 1 and trip_id in trip_ids:
+        if stop_id == 8 and stop_sequence == 0 and trip_id in trip_ids:
             trains[trip_id] = {'depart': departure_time, 'arrive': None}
 
         if stop_id == 38 and trip_id in trains:
