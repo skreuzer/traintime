@@ -1,5 +1,7 @@
 #!/usr/local/bin/python
 
+from __future__ import unicode_literals
+
 import csv
 import datetime
 import sys
@@ -90,7 +92,7 @@ service_ids = []
 trains = {}
 
 with open(calendar_dates_txt, 'r') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    csvreader = csv.reader(csvfile, delimiter=str(u','), quotechar=str(u'"'))
     next(csvreader)
 
     for row in csvreader:
@@ -106,7 +108,7 @@ if not service_ids:
     sys.exit(1)
 
 with open(trips_txt, 'r') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    csvreader = csv.reader(csvfile, delimiter=str(u','), quotechar=str(u'"'))
     # Skip over the header of the csv file
     next(csvreader)
 
@@ -120,7 +122,7 @@ with open(trips_txt, 'r') as csvfile:
             trip_ids.append(row[2])
 
 with open(stop_times_txt, 'r') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    csvreader = csv.reader(csvfile, delimiter=str(u','), quotechar=str(u'"'))
     # Skip over the header of the csv file
     next(csvreader)
 
