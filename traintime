@@ -90,6 +90,7 @@ calendar_dates_txt = os.environ['HOME'] + '/google_transit/calendar_dates.txt'
 trip_ids = []
 service_ids = []
 trains = {}
+station_lookup = {}
 
 with open(calendar_dates_txt, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=str(u','), quotechar=str(u'"'))
@@ -106,6 +107,16 @@ with open(calendar_dates_txt, 'r') as csvfile:
 if not service_ids:
     print "No service ids found for {}.".format(today)
     sys.exit(1)
+
+with open(stops_txt, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=str(u','), quotechar=str(u'"'))
+    next(csvreader)
+
+    for row in csvreader:
+        stop_id = row[0]
+        stop_name = row[1]
+
+        station_lookup[stop_id] = stop_name
 
 with open(trips_txt, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=str(u','), quotechar=str(u'"'))
