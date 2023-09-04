@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "traintime"
+version = "0.1.0"
+description = "Long Island Rail Road GTFS Parser"
+authors = ["Steven Kreuzer <skreuzer@FreeBSD.org>"]
+license = "BSD-2-Clause"
+readme = "README.md"
+repository = "https://github.com/skreuzer/traintime"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.scripts]
+traintime = "traintime:run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
