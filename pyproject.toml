@@ -9,9 +9,12 @@ repository = "https://github.com/skreuzer/traintime"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+click = "^8.1.7"
+requests = "^2.31.0"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.scripts]
-traintime = "traintime:run"
+traintime = "traintime.cli:cli"
 
 [build-system]
 requires = ["poetry-core"]
